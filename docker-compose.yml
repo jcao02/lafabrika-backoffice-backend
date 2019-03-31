@@ -1,0 +1,13 @@
+version: "3"
+services:
+  db:
+    image: lafabrika/database:0.0.1
+  accountability:
+    build:
+      context: services/accountability
+    volumes:
+      - ./services/accountability:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
