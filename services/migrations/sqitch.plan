@@ -3,3 +3,4 @@
 %uri=https://github.com/jcao02/lafabrika-backoffice-backend
 
 appschema 2019-04-01T23:39:36Z Juan Carlos Arocha <arochajuan2@gmail.com> # add lafabrika schema
+tables/users 2019-04-01T23:44:35Z Juan Carlos Arocha <arochajuan2@gmail.com> # add users table to store user information
