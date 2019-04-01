@@ -6,8 +6,7 @@ services:
     restart: always
   # Accountability service
   accountability:
-    build:
-      context: services/accountability
+    build: services/accountability
     volumes:
       - ./services/accountability:/app
     ports:
@@ -16,8 +15,7 @@ services:
       - db
   # Migrations service
   migrations:
-    build:
-      context: services/migrations
+    build: services/migrations
     # TTY true will keep the container alive to run migrations
     tty: true
     volumes:
