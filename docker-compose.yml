@@ -1,7 +1,10 @@
 version: "3"
 services:
+  # Database service (pre-built image)
   db:
     image: lafabrika/database:0.0.1
+    restart: always
+  # Accountability service
   accountability:
     build:
       context: services/accountability
@@ -9,5 +12,15 @@ services:
       - ./services/accountability:/app
     ports:
       - "3000:3000"
+    depends_on:
+      - db
+  # Migrations service
+  migrations:
+    build:
+      context: services/migrations
+    # TTY true will keep the container alive to run migrations
+    tty: true
+    volumes:
+      - ./services/migrations:/migrations
     depends_on:
       - db
