@@ -4,6 +4,17 @@ services:
   db:
     image: lafabrika/database:0.0.1
     restart: always
+
+  # Authentication service
+  authentication:
+    build: services/authentication
+    volumes:
+      - ./services/authentication:/app
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
   # Accountability service
   accountability:
     build: services/accountability
