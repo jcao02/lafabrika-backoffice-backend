@@ -5,6 +5,7 @@ Backend services to hold backoffice operation within the company.
 - Accountability: Handles the company's accountability.
 - Database: Persists the data used by the services.
 - Migrations: System to make migrations in the database service.
+- Authentication: Handles the user authentication
 
 # Containers
 The app is contained in `Docker`. Each service has its own `Dockerfile` and they're composed using the `docker-compose.yml` in the root folder.
