@@ -11,7 +11,17 @@ services:
     volumes:
       - ./services/authentication:/app
     ports:
-      - "3001:3001"
+      - "3001:3000"
+    depends_on:
+      - db
+
+  # Users service
+  users:
+    build: services/users
+    volumes:
+      - ./services/users:/app
+    ports:
+      - "3002:3000"
     depends_on:
       - db
 
@@ -24,6 +34,7 @@ services:
       - "3000:3000"
     depends_on:
       - db
+
   # Migrations service
   migrations:
     build: services/migrations
