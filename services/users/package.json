@@ -1,0 +1,22 @@
+{
+  "name": "lafabrika-users",
+  "version": "0.0.0",
+  "description": "La Fábrika users related operations",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/jcao02/lafabrika-backoffice-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcao02/lafabrika-backoffice-backend/issues"
+  },
+  "homepage": "https://github.com/jcao02/lafabrika-backoffice-backend#readme",
+  "dependencies": {
+    "hapi": "^18.1.0"
+  }
+}
