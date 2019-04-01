@@ -15,7 +15,7 @@ services:
     depends_on:
       - db
 
-  # Authentication service
+  # Users service
   users:
     build: services/users
     volumes:
