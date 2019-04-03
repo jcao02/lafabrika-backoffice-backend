@@ -10,7 +10,8 @@ CREATE TABLE lafabrika.users (
   first_name TEXT,
   last_name TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  role TEXT REFERENCES lafabrika.roles (name)
+  role TEXT REFERENCES lafabrika.roles (name),
+  password TEXT NOT NULL
 );
 
 COMMIT;
