@@ -2,7 +2,7 @@
 
 BEGIN;
 
-DROP TABLE lafabrika.roles;
 DROP TABLE lafabrika.users;
+DROP TABLE lafabrika.roles;
 
 COMMIT;
