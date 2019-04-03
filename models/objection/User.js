@@ -1,6 +1,7 @@
 'use strict';
 
 const { Model } = require('objection');
+const Role = require('./Role');
 
 class User extends Model {
   static get tableName() {
@@ -15,6 +16,19 @@ class User extends Model {
         email: { type: 'string' },
         firstName: { type: 'string' },
         lastName: { type: 'string' }
+      }
+    };
+  }
+
+  static get relationMappings() {
+    return {
+      role: {
+        relation: Model.HasOneRelation,
+        modelClass: Role,
+        join: {
+          from: 'users.role',
+          to: 'roles.name'
+        }
       }
     };
   }
