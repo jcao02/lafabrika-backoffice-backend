@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/jcao02/lafabrika-backoffice-backend/issues"
   },
-  "homepage": "https://github.com/jcao02/lafabrika-backoffice-backend#readme"
+  "homepage": "https://github.com/jcao02/lafabrika-backoffice-backend#readme",
+  "dependencies": {
+    "knex": "^0.16.3",
+    "pg": "^7.9.0"
+  }
 }
