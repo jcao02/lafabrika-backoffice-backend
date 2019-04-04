@@ -2,6 +2,6 @@
 
 BEGIN;
 
-CREATE SCHEMA lafabrika;
+CREATE SCHEMA lafabrika AUTHORIZATION lafabrika;
 
 COMMIT;
