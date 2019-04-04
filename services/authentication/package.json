@@ -4,7 +4,7 @@
   "description": "La Fábrika authentication related operations",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,13 @@
   },
   "homepage": "https://github.com/jcao02/lafabrika-backoffice-backend#readme",
   "dependencies": {
-    "hapi": "^18.1.0"
+    "boom": "^7.3.0",
+    "hapi": "^18.1.0",
+    "joi": "^14.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "lafabrika-objection-models": "file:../../models/objection"
+  },
+  "devDependencies": {
+    "jasmine": "^3.4.0"
   }
 }
