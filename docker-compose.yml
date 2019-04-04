@@ -34,13 +34,3 @@ services:
       - "3000:3000"
     depends_on:
       - db
-
-  # Migrations service
-  migrations:
-    build: services/migrations
-    # TTY true will keep the container alive to run migrations
-    tty: true
-    volumes:
-      - ./services/migrations:/migrations
-    depends_on:
-      - db
