@@ -7,8 +7,8 @@ services:
 
   # Migrations service
   migrations:
-    build: services/migrations
+    build: .
     volumes:
-      - ./services/migrations:/migrations
+      - ./:/migrations
     depends_on:
       - db
