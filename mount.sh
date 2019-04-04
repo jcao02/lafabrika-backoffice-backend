@@ -9,10 +9,21 @@ build_database_image() {
 
   databaseDir=$currDir/services/database
 
+  # Build the image
   cd $databaseDir;
   docker build . -t $1 &> /dev/null;
 
   cd $currDir;
+
+  echo "Done!";
+}
+
+# Creates a directory in the current directory with custom name
+create_database_volume_directory() {
+  currDir=$(pwd);
+  echo -n "Creating database volume directory $currDir/$1...";
+
+  mkdir -p $currDir/$1;
 
   echo "Done!";
 }
@@ -28,6 +39,7 @@ create_internal_network() {
 
 main() {
   build_database_image lafabrika/database:0.0.1;
+  create_database_volume_directory pg-data;
   create_internal_network internal;
 }
 

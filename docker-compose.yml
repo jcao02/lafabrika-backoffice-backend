@@ -5,7 +5,7 @@ services:
     container_name: lafabrika-database
     image: lafabrika/database:0.0.1
     volumes:
-      - "./services/database/data:/var/lib/postgresql/data"
+      - "./pg-data:/var/lib/postgresql/data"
     restart: always
     networks:
       - internal
