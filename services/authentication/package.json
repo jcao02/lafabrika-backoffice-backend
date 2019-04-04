@@ -17,6 +17,10 @@
   },
   "homepage": "https://github.com/jcao02/lafabrika-backoffice-backend#readme",
   "dependencies": {
-    "hapi": "^18.1.0"
+    "hapi": "^18.1.0",
+    "lafabrika-objection-models": "file:../../models/objection"
+  },
+  "devDependencies": {
+    "jasmine": "^3.4.0"
   }
 }
