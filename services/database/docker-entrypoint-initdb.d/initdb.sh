@@ -15,10 +15,4 @@ psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lafabrika_test TO lafabrik
 echo "Initalizing sqitch role..."
 psql -U postgres -c "CREATE ROLE sqitch WITH PASSWORD 'sqitch'";
 psql -U postgres -c "ALTER ROLE sqitch WITH LOGIN";
-psql -U postgres -c "ALTER ROLE sqitch CREATEDB";
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lafabrika_development TO sqitch";
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE lafabrika_test TO sqitch";
-
-echo "Initializing sqitch registry..."
-psql -U postgres -c "CREATE DATABASE sqitch OWNER sqitch";
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE sqitch TO sqitch";
+psql -U postgres -c "ALTER ROLE sqitch WITH SUPERUSER";
