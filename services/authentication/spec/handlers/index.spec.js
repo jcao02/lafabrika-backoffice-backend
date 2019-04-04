@@ -1,5 +1,5 @@
 const { server } = require('../../server');
-const { User } = require('lafabrika-objection-models');
+const AuthenticationManager = require('../../classes/authentication-manager');
 
 // Helper to test status code
 async function testStatusCode(opts, expectedCode, cb) {
@@ -42,13 +42,13 @@ describe('Handlers', () => {
         url: '/sign-in',
         payload: { email, password }
       }
-      const modelSpy = spyOn(User, 'checkUserPassword').and.returnValue(Promise.resolve(false));
+      const authSpy = spyOn(AuthenticationManager, 'authenticate').and.returnValue(Promise.resolve(null));
       const expectedCode = 401;
       testStatusCode(opts, expectedCode, (_, err) => {
         if (err) {
           done.fail(err);
         } else {
-          expect(modelSpy).toHaveBeenCalledWith(email, password);
+          expect(authSpy).toHaveBeenCalledWith(email, password);
           done();
         }
       });
@@ -60,22 +60,16 @@ describe('Handlers', () => {
         payload: { email, password }
       }
 
-      process.env.JWT_PRIV_KEY = 'JWT_PRIV_KEY';
-      const modelSpy = spyOn(User, 'checkUserPassword').and.returnValue(Promise.resolve(true));
-      const userQuery = { where() { return Promise.resolve({ email, role: 'admin' }) } };
-      const querySpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const token = 'myToken';
+      const authSpy = spyOn(AuthenticationManager, 'authenticate').and.returnValue(Promise.resolve(token));
       const expectedCode = 201;
       testStatusCode(opts, expectedCode, (res, err) => {
         if (err) {
           done.fail(err);
         } else {
           const payload = JSON.parse(res.payload);
-          expect(payload.token).not.toBeUndefined();
-
-          expect(modelSpy).toHaveBeenCalledWith(email, password);
-          expect(querySpy).toHaveBeenCalled();
-
-          delete process.env.JWT_PRIV_KEY;
+          expect(payload.token).toEqual(token);
+          expect(authSpy).toHaveBeenCalledWith(email, password);
           done();
         }
       });
