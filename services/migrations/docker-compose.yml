@@ -1,0 +1,15 @@
+version: "3"
+services:
+  # Migrations service
+  migrations:
+    build: .
+    volumes:
+      - ./:/migrations
+    networks:
+      - internal
+    external_links:
+      - lafabrika-database:db
+
+networks:
+  internal:
+    external: true
