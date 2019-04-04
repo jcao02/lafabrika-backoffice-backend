@@ -4,3 +4,4 @@
 
 appschema 2019-04-01T23:39:36Z Juan Carlos Arocha <arochajuan2@gmail.com> # add lafabrika schema
 tables/users/create 2019-04-01T23:44:35Z Juan Carlos Arocha <arochajuan2@gmail.com> # add users table to store user information
+extensions/pgcrypto 2019-04-04T16:18:56Z Juan Carlos Arocha <arochajuan2@gmail.com> # add extension pgcrypto
