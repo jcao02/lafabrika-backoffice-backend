@@ -4,7 +4,7 @@
   "description": "Database models written in JavaScript (ObjectionJS)",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
     "knex": "^0.16.3",
     "objection": "^1.6.7",
     "pg": "^7.9.0"
+  },
+  "devDependencies": {
+    "jasmine": "^3.4.0"
   }
 }
