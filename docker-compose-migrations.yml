@@ -1,0 +1,14 @@
+version: "3"
+services:
+  # Database service (pre-built image)
+  db:
+    image: lafabrika/database:0.0.1
+    restart: always
+
+  # Migrations service
+  migrations:
+    build: services/migrations
+    volumes:
+      - ./services/migrations:/migrations
+    depends_on:
+      - db
