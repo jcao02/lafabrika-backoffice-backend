@@ -11,7 +11,7 @@ Model.knex(knex);
 
 /** Export associated models */
 module.exports = {
-  User: require('./User'),
-  Role: require('./Role'),
+  User: require('./models/User'),
+  Role: require('./models/Role'),
 };
 
