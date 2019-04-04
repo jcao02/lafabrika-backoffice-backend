@@ -1,5 +1,6 @@
 const { server } = require('../../server');
 const AuthenticationManager = require('../../classes/authentication-manager');
+const TokenGenerator = require('../../classes/token-generator');
 
 // Helper to test status code
 async function testStatusCode(opts, expectedCode, cb) {
@@ -60,8 +61,10 @@ describe('Handlers', () => {
         payload: { email, password }
       }
 
+      const user = { email, role: 'admin' };
+      const authSpy = spyOn(AuthenticationManager, 'authenticate').and.returnValue(Promise.resolve(user));
       const token = 'myToken';
-      const authSpy = spyOn(AuthenticationManager, 'authenticate').and.returnValue(Promise.resolve(token));
+      const tokenSpy = spyOn(TokenGenerator, 'generate').and.returnValue(token)
       const expectedCode = 201;
       testStatusCode(opts, expectedCode, (res, err) => {
         if (err) {
@@ -70,6 +73,7 @@ describe('Handlers', () => {
           const payload = JSON.parse(res.payload);
           expect(payload.token).toEqual(token);
           expect(authSpy).toHaveBeenCalledWith(email, password);
+          expect(tokenSpy).toHaveBeenCalledWith({ email: user.email, role: user.role}, '1y');
           done();
         }
       });
