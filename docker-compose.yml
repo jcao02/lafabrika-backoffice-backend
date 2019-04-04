@@ -2,8 +2,13 @@ version: "3"
 services:
   # Database service (pre-built image)
   db:
+    container_name: lafabrika-database
     image: lafabrika/database:0.0.1
+    volumes:
+      - "./services/database/data:/var/lib/postgresql/data"
     restart: always
+    networks:
+      - internal
 
   # Authentication service
   authentication:
@@ -34,3 +39,6 @@ services:
       - "3000:3000"
     depends_on:
       - db
+networks:
+  internal:
+    external: true
