@@ -15,6 +15,7 @@ services:
     build: services/authentication
     volumes:
       - ./services/authentication:/app
+      - ./models/objection:/app/../../models/objection
     ports:
       - "3001:3000"
     depends_on:
