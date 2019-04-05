@@ -1,0 +1,11 @@
+%syntax-version=1.0.0
+%project=lafabrika
+%uri=https://github.com/jcao02/lafabrika-backoffice-backend
+
+appschema 2019-04-01T23:39:36Z Juan Carlos Arocha <arochajuan2@gmail.com> # add lafabrika schema
+tables/users/create 2019-04-01T23:44:35Z Juan Carlos Arocha <arochajuan2@gmail.com> # add users table to store user information
+extensions/pgcrypto 2019-04-04T16:18:56Z Juan Carlos Arocha <arochajuan2@gmail.com> # add extension pgcrypto
+functions/trigger_function_encrypt_password_before_insert 2019-04-04T16:44:04Z Juan Carlos Arocha <arochajuan2@gmail.com> # add trigger to encrypt password before user insertion
+tables/users/trigger_encrypt_password 2019-04-04T18:00:07Z Juan Carlos Arocha <arochajuan2@gmail.com> # add trigger to encrypt password before insert
+functions/users/check_user_password_combination 2019-04-04T18:20:51Z Juan Carlos Arocha <arochajuan2@gmail.com> # add function to check if a user/password combination exists
+@0.1.0 2019-04-04T23:56:14Z Juan Carlos Arocha <arochajuan2@gmail.com> # Bump version to 0.1.0

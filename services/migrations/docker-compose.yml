@@ -1,0 +1,18 @@
+version: "3"
+services:
+  # Migrations service
+  migrations:
+    build: .
+    volumes:
+      - ./:/migrations
+      - ~/.sqitch/:/home/.sqitch
+    environment:
+      - SQITCH_USER_CONFIG=/home/.sqitch/sqitch.conf
+    networks:
+      - internal
+    external_links:
+      - lafabrika-database:db
+
+networks:
+  internal:
+    external: true

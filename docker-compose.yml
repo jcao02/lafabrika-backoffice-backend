@@ -1,0 +1,45 @@
+version: "3"
+services:
+  # Database service (pre-built image)
+  db:
+    container_name: lafabrika-database
+    image: lafabrika/database:0.0.1
+    volumes:
+      - "./pg-data:/var/lib/postgresql/data"
+    restart: always
+    networks:
+      - internal
+
+  # Authentication service
+  authentication:
+    build: services/authentication
+    volumes:
+      - ./services/authentication:/app
+      - ./models/objection:/app/../../models/objection
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db
+
+  # Users service
+  users:
+    build: services/users
+    volumes:
+      - ./services/users:/app
+    ports:
+      - "3002:3000"
+    depends_on:
+      - db
+
+  # Accountability service
+  accountability:
+    build: services/accountability
+    volumes:
+      - ./services/accountability:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+networks:
+  internal:
+    external: true
