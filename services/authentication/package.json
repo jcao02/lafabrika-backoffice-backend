@@ -1,6 +1,6 @@
 {
   "name": "lafabrika-authentication",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "La Fábrika authentication related operations",
   "main": "index.js",
   "scripts": {
