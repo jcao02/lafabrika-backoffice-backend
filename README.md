@@ -16,4 +16,5 @@ Versions:
 
 To start developing:
   1. Go to `services/database` and run `docker build . -t lafabrika/database:0.0.1`
-  2. Go to the root folder and run `docker-compose up`
+  2. Run `npm install` in `services/accountability`, `services/authentication`, `services/users` and `models/objection`
+  3. Go to the root folder and run `docker-compose up`
