@@ -14,23 +14,6 @@ build_image () {
   echo "Done!";
 }
 
-# Builds the database image with custom tag
-build_database_image() {
-  echo -n "Building database image $1...";
-
-  currDir=$(pwd);
-
-  databaseDir=$currDir/services/database
-
-  # Build the image
-  cd $databaseDir;
-  docker build . -t $1 &> /dev/null;
-
-  cd $currDir;
-
-  echo "Done!";
-}
-
 # Creates a directory in the current directory with custom name
 create_database_volume_directory() {
   currDir=$(pwd);
@@ -53,7 +36,7 @@ create_internal_network() {
 main() {
   build_image ./docker/postgres-client lafabrika/postgres-client
   build_image ./docker/node lafabrika/node-postgres-client
-  build_database_image lafabrika/database:0.0.1;
+  build_image ./services/database lafabrika/database:0.0.1
   create_database_volume_directory pg-data;
   create_internal_network internal;
 }
