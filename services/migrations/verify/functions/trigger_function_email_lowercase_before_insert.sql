@@ -2,6 +2,7 @@
 
 BEGIN;
 
--- XXX Add verifications here.
+SET search_path TO lafabrika, public;
+SELECT 'email_lowercase()'::regprocedure;
 
 ROLLBACK;
