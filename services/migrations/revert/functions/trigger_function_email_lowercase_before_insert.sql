@@ -2,6 +2,7 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+SET search_path TO lafabrika, public;
+DROP FUNCTION email_lowercase();
 
 COMMIT;
