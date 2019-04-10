@@ -9,3 +9,6 @@ functions/trigger_function_encrypt_password_before_insert 2019-04-04T16:44:04Z J
 tables/users/trigger_encrypt_password 2019-04-04T18:00:07Z Juan Carlos Arocha <arochajuan2@gmail.com> # add trigger to encrypt password before insert
 functions/users/check_user_password_combination 2019-04-04T18:20:51Z Juan Carlos Arocha <arochajuan2@gmail.com> # add function to check if a user/password combination exists
 @0.1.0 2019-04-04T23:56:14Z Juan Carlos Arocha <arochajuan2@gmail.com> # Bump version to 0.1.0
+
+tables/users/trigger_email_lowercase 2019-04-09T02:08:20Z Daniel Arocha <arocha.daniel3@gmail.com > # add trigger to downcase emails before insertion
+functions/trigger_function_email_lowercase_before_insert 2019-04-09T02:18:55Z Daniel Arocha <arocha.daniel3@gmail.com > # add function to lowercase emails before insertion
