@@ -16,7 +16,7 @@ class AuthenticationManager {
     const isRightCombination = await User.checkUserPassword(email, password);
 
     if (isRightCombination) {
-      const user = await User.query().where('email', '=', email);
+      const user = await User.query().where('email', '=', email).first();
       return user;
     } else {
       return null;
