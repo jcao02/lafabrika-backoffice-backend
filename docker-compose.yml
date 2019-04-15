@@ -28,6 +28,8 @@ services:
   # Users service
   users:
     build: services/users
+    env_file:
+      - ./environment/common.env
     volumes:
       - ./services/users:/app
     ports:
@@ -38,6 +40,8 @@ services:
   # Accountability service
   accountability:
     build: services/accountability
+    env_file:
+      - ./environment/common.env
     volumes:
       - ./services/accountability:/app
     ports:
