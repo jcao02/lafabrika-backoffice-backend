@@ -1,10 +1,18 @@
 'use strict';
 
 const Hapi = require('hapi');
+const routes = require('./routes');
 
 const server = Hapi.server({
   port: 3000,
-  host: 'localhost'
+  host: '0.0.0.0',
+  routes: {
+    cors: { credentials: true }
+  }
+});
+
+routes.forEach((route) => {
+  server.route(route);
 });
 
 const init = async () => {
@@ -17,4 +25,9 @@ process.on('unhandledRejection', (err) => {
   process.exit(1);
 });
 
-init();
+/** Only start server if not required by another module */
+if (!module.parent) {
+  init();
+}
+
+module.exports = { server };
