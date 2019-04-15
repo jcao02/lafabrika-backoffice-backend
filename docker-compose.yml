@@ -13,9 +13,8 @@ services:
   # Authentication service
   authentication:
     build: services/authentication
-    environment:
-      - PG_CONNECTION_URI=postgres://lafabrika:lafabrika@db/lafabrika
-      - JWT_PRIV_KEY=MY_TOKEN
+    env_file:
+      - ./environment/common.env
     volumes:
       - ./services/authentication:/app
       - ./models/objection:/app/../../models/objection
