@@ -349,6 +349,51 @@ describe('Users Handlers', () => {
         expect(result.statusCode).toBe(expected)
         done();
       });
+      it('should validate email', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload: { ...user, email: 'invalid' },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: [ adminScope, selfScope ] }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 400;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
+      it('should validate password length 8', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload: { ...user, password: '1234567' },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: [ adminScope, selfScope ] }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 400;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
+      it('should not allow role', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload: { ...user, role: 'admin' },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: [ adminScope, selfScope ] }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 400;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
     });
   });
 });
