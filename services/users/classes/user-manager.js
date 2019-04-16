@@ -1,5 +1,6 @@
 'use strict';
 
+const assert = require('assert');
 const { User } = require('lafabrika-objection-models');
 
 /**
@@ -12,6 +13,10 @@ class UserManager {
    * @param {Object} payload with user data
    */
   async createUser(payload) {
+    assert.ok(payload.email);
+    assert.ok(payload.password);
+    assert.ok(payload.role);
+
     return await User.query().insertAndFetch(payload);
   }
 
