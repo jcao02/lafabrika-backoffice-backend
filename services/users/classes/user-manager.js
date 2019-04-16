@@ -40,6 +40,9 @@ class UserManager {
    * @param {Object} options to get user by (limit and offset)
    */
   async getUsers(options) {
+    assert.ok('limit' in options);
+    assert.ok('offset' in options);
+
     const { limit, offset } = options;
     return await User.query().limit(limit).offset(offset);
   }

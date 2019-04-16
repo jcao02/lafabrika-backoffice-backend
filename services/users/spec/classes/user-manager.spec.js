@@ -120,9 +120,43 @@ describe('UserManager', () => {
   });
 
   describe('getUsers', () => {
-    it('should get the list of users properly');
-    it('should throw an error if limit is missing');
-    it('should throw an error if offset is missing');
+    it('should get the list of users properly', async done => {
+      const queryObj = { limit() { return Promise.resolve([user])}, offset() { return Promise.resolve([user]) } }
+      const userQuery = { limit() { return queryObj; }, offset() { return queryObj; }};
+      const listSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const payload = { limit: 10, offset: 0 };
+      const users = await manager.getUsers(payload);
+
+      expect(users).toEqual([user]);
+      expect(listSpy).toHaveBeenCalled();
+      done();
+    });
+    it('should throw an error if limit is missing', async done => {
+      const queryObj = { limit() { return Promise.resolve([user])}, offset() { return Promise.resolve([user]) } }
+      const userQuery = { limit() { return queryObj; }, offset() { return queryObj; }};
+      const listSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      try {
+        const payload = { offset: 0 };
+        await manager.getUsers(payload);
+        done.fail('Should throw an error');
+      } catch (err) {
+        expect(listSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+    it('should throw an error if offset is missing', async done => {
+      const queryObj = { limit() { return Promise.resolve([user])}, offset() { return Promise.resolve([user]) } }
+      const userQuery = { limit() { return queryObj; }, offset() { return queryObj; }};
+      const listSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      try {
+        const payload = { limit: 10 };
+        await manager.getUsers(payload);
+        done.fail('Should throw an error');
+      } catch (err) {
+        expect(listSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
   });
 
   describe('getUser', () => {
