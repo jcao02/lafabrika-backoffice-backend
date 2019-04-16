@@ -61,7 +61,7 @@ class UserManager {
    * @param {number} id of the user to delete
    */
   async deleteUser(id) {
-    return await User.query().deleteById(id);
+    return await User.query().deleteById(id).throwIfNotFound();
   }
 }
 

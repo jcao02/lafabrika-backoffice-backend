@@ -182,7 +182,23 @@ describe('UserManager', () => {
   });
 
   describe('deleteUser', () => {
-    it('should delete the user properly');
-    it('should return throw and error if the user does not exist');
+    it('should delete the user properly', async done => {
+      const userQuery = { deleteById() { return { throwIfNotFound() { return Promise.resolve(); } } } };
+      const findSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      await manager.deleteUser(user.id);
+      expect(findSpy).toHaveBeenCalled();
+      done();
+    });
+    it('should return throw and error if the user does not exist', async done => {
+      const userQuery = { deleteById() { return { throwIfNotFound() { return Promise.reject(User.createNotFoundError()); } } } };
+      const findSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      try {
+        await manager.deleteUser(user.id);
+      } catch (err) {
+        expect(err instanceof Error).toBe(true);
+        expect(findSpy).toHaveBeenCalled();
+        done();
+      }
+    });
   });
 });
