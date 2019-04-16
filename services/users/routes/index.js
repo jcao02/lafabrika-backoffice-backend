@@ -43,6 +43,7 @@ const routes = [
       validate: {
         payload: {
           email: Joi.string().email(),
+          role: Joi.string().valid(['admin', 'user']),
           password: Joi.string().min(8)
         }
       }

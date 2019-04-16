@@ -166,7 +166,8 @@ describe('Users Handlers', () => {
     beforeEach(() => {
       user = {
         email: faker.internet.email(),
-        password: faker.internet.password()
+        password: faker.internet.password(),
+        role: 'admin'
       };
     });
     describe('Success', () => {
@@ -237,8 +238,36 @@ describe('Users Handlers', () => {
         expect(result.statusCode).toBe(expected)
         done();
       });
-      it('should validate password length');
-      it('should not allow role');
+      it('should validate password length 8', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/admin/users/${id}`,
+          payload: { ...user, password: '1234567' },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: adminScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 400;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
+      it('should validate role', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/admin/users/${id}`,
+          payload: { ...user, role: 'invalid' },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: adminScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 400;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
     });
   });
 });
