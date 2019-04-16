@@ -1,6 +1,8 @@
 const faker = require('faker');
+const { User } = require('lafabrika-objection-models');
 const { server } = require('../../server');
 const { adminScope, userScope } = require('../../routes/scopes');
+const UserManager = require('../../classes/user-manager');
 
 describe('Users Handlers', () => {
   let user;
@@ -16,11 +18,13 @@ describe('Users Handlers', () => {
   describe('POST /admin/users', () => {
     describe('Success', () => {
       it('should return 201 on succes', async done => {
-        const createdUser = { ...user, id: 1 };
+        const createdUser = ( new User() ).$setJson({ ...user });
+        const userSpy = spyOn(UserManager, 'createUser').and.returnValue(Promise.resolve(createdUser));
+        const payload = { ...user };
         const opts = {
           method: 'POST',
           url: '/admin/users',
-          payload: { ...user },
+          payload,
           auth: {
             strategy: 'jwt',
             credentials: { scope: adminScope }
@@ -30,8 +34,10 @@ describe('Users Handlers', () => {
         const expected = 201;
         expect(result.statusCode).toBe(expected)
 
-        const payload = JSON.parse(result.payload);
-        expect(payload).toEqual(createdUser);
+        const resultPayload = JSON.parse(result.payload);
+        expect(resultPayload).toEqual(createdUser.toJSON());
+
+        expect(userSpy).toHaveBeenCalledWith(payload);
         done();
       });
     });
