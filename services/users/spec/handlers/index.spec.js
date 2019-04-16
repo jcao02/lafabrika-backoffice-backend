@@ -1,7 +1,7 @@
 const faker = require('faker');
 const { User } = require('lafabrika-objection-models');
 const { server } = require('../../server');
-const { adminScope, userScope } = require('../../routes/scopes');
+const { adminScope, userScope, selfScope } = require('../../routes/scopes');
 const UserManager = require('../../classes/user-manager');
 
 describe('Users Handlers', () => {
@@ -266,6 +266,43 @@ describe('Users Handlers', () => {
         const result = await server.inject(opts);
         const expected = 400;
         expect(result.statusCode).toBe(expected)
+        done();
+      });
+    });
+  });
+
+  describe('PATCH /users/{id}', () => {
+    const id = 1;
+    let user;
+    beforeEach(() => {
+      user = {
+        email: faker.internet.email(),
+        password: faker.internet.password()
+      };
+    });
+
+    describe('Success', () => {
+      it('should patch properly a user', async done => {
+        const updatedUser = ( new User() ).$setJson({ ...user });
+        const userSpy = spyOn(UserManager, 'updateUser').and.returnValue(Promise.resolve(updatedUser));
+        const payload = { ...user };
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload,
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: [ adminScope, selfScope ] }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 200;
+        expect(result.statusCode).toBe(expected)
+
+        const resultPayload = JSON.parse(result.payload);
+        expect(resultPayload).toEqual(updatedUser.toJSON());
+
+        expect(userSpy).toHaveBeenCalledWith(id, payload);
         done();
       });
     });
