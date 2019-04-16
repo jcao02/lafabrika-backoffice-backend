@@ -19,6 +19,7 @@
   "dependencies": {
     "hapi": "^18.1.0",
     "hapi-auth-jwt2": "^8.3.0",
+    "joi": "^14.3.1",
     "lafabrika-objection-models": "file:../../models/objection"
   },
   "devDependencies": {

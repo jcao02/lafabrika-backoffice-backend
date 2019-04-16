@@ -1,5 +1,7 @@
 'use strict';
 
+const Joi = require('joi');
+
 const {
   userNewHandler,
   userEditHandler,
@@ -8,11 +10,26 @@ const {
   userDeleteHandler
 } = require('../handlers');
 
+const { adminScope } = require('./scopes');
+
 const routes = [
   {
     method: 'POST',
     path: '/admin/users',
-    handler: userNewHandler
+    handler: userNewHandler,
+    config: {
+      auth: {
+        strategy: 'jwt',
+        scope: adminScope
+      },
+      validate: {
+        payload: {
+          email: Joi.string().email().required(),
+          role: Joi.string().allow(['admin', 'user']),
+          password: Joi.string().required()
+        }
+      }
+    }
   },
   {
     method: 'PATCH',
