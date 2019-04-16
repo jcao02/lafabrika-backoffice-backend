@@ -2,17 +2,8 @@ const faker = require('faker');
 const { server } = require('../../server');
 const { adminScope, userScope } = require('../../routes/scopes');
 
-const JWT_PRIV_KEY = 'JWT_PRIV_KEY';
-
 describe('Users Handlers', () => {
   let user;
-  let oldKey;
-
-
-  beforeAll(() => {
-    oldKey = process.env.JWT_PRIV_KEY;
-    process.env.JWT_PRIV_KEY = JWT_PRIV_KEY;
-  });
 
   beforeEach(() => {
     user = {
@@ -20,10 +11,6 @@ describe('Users Handlers', () => {
       password: faker.internet.password(),
       role: userScope
     };
-  });
-
-  afterAll(() => {
-    process.env.JWT_PRIV_KEY = oldKey;
   });
 
   describe('POST /admin/users', () => {
