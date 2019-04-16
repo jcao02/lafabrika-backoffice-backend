@@ -13,9 +13,8 @@ services:
   # Authentication service
   authentication:
     build: services/authentication
-    environment:
-      - PG_CONNECTION_URI=postgres://lafabrika:lafabrika@db/lafabrika
-      - JWT_PRIV_KEY=MY_TOKEN
+    env_file:
+      - ./environment/common.env
     volumes:
       - ./services/authentication:/app
       - ./models/objection:/app/../../models/objection
@@ -29,16 +28,23 @@ services:
   # Users service
   users:
     build: services/users
+    env_file:
+      - ./environment/common.env
     volumes:
       - ./services/users:/app
+      - ./models/objection:/app/../../models/objection
     ports:
       - "3002:3000"
+    networks:
+      - internal
     depends_on:
       - db
 
   # Accountability service
   accountability:
     build: services/accountability
+    env_file:
+      - ./environment/common.env
     volumes:
       - ./services/accountability:/app
     ports:
