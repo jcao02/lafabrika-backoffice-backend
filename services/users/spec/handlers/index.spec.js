@@ -5,17 +5,16 @@ const { adminScope, userScope } = require('../../routes/scopes');
 const UserManager = require('../../classes/user-manager');
 
 describe('Users Handlers', () => {
-  let user;
-
-  beforeEach(() => {
-    user = {
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      role: userScope
-    };
-  });
-
   describe('POST /admin/users', () => {
+    let user;
+
+    beforeEach(() => {
+      user = {
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        role: userScope
+      };
+    });
     describe('Success', () => {
       it('should return 201 on succes', async done => {
         const createdUser = ( new User() ).$setJson({ ...user });
@@ -163,6 +162,13 @@ describe('Users Handlers', () => {
   });
   describe('PATCH /admin/users/{id}', () => {
     const id = 1;
+    let user;
+    beforeEach(() => {
+      user = {
+        email: faker.internet.email(),
+        password: faker.internet.password()
+      };
+    });
     describe('Success', () => {
       it('should properly patch a user', async done => {
         const updatedUser = ( new User() ).$setJson({ ...user });
@@ -216,7 +222,21 @@ describe('Users Handlers', () => {
         expect(result.statusCode).toBe(expected)
         done();
       });
-      it('should validate email');
+      it('should validate email', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/admin/users/${id}`,
+          payload: { ...user, email: 'invalid' },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: adminScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 400;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
       it('should validate password length');
       it('should not allow role');
     });

@@ -39,6 +39,12 @@ const routes = [
       auth: {
         strategy: 'jwt',
         scope: adminScope
+      },
+      validate: {
+        payload: {
+          email: Joi.string().email(),
+          password: Joi.string().min(8)
+        }
       }
     }
   },
