@@ -1,5 +1,6 @@
 'use strict';
 
+const { User } = require('lafabrika-objection-models');
 const UserManager = require('../classes/user-manager');
 const Boom = require('boom');
 
@@ -45,9 +46,18 @@ const userListHandler = async (request) => {
 /**
  * Handles user delete
  */
-const userDeleteHandler = async (request) => {
+const userDeleteHandler = async (request, h) => {
   const { id } = request.params;
-  return await UserManager.deleteUser(id);
+  try {
+    await UserManager.deleteUser(+id);
+    return h.response().code(200);
+  } catch (err) {
+    if (err instanceof User.NotFoundError) {
+      throw Boom.notFound('User not found');
+    } else {
+      throw err;
+    }
+  }
 };
 
 

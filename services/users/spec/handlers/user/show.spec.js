@@ -5,7 +5,7 @@ const { User } = require('lafabrika-objection-models');
 const { server } = require('../../../server');
 const { userScope } = require('../../../routes/scopes');
 
-fdescribe('User Handlers', () => {
+describe('User Handlers', () => {
   let user;
   beforeEach(() => {
     user = {
