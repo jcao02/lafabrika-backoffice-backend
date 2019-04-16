@@ -33,12 +33,18 @@ const routes = [
   },
   {
     method: 'PATCH',
-    path: '/admin/users',
-    handler: userEditHandler
+    path: '/admin/users/{id}',
+    handler: userEditHandler,
+    config: {
+      auth: {
+        strategy: 'jwt',
+        scope: adminScope
+      }
+    }
   },
   {
     method: 'PATCH',
-    path: '/users',
+    path: '/users/{id}',
     handler: userEditHandler
   },
   {

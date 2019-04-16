@@ -15,7 +15,7 @@ const userNewHandler = async (request, h) => {
  */
 const userEditHandler = async (request) => {
   const { id } = request.params;
-  const user = await UserManager.updateUser(id, request.payload);
+  const user = await UserManager.updateUser(+id, request.payload);
   return user.toJSON();
 };
 
