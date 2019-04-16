@@ -4,15 +4,16 @@ const { User } = require('lafabrika-objection-models');
 
 describe('UserManager', () => {
   let manager = new UserManager();
+  let user;
+  beforeEach(() => {
+    user = {
+      id: faker.random.number(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      role: 'admin'
+    };
+  });
   describe('createUser', () => {
-    let user;
-    beforeEach(() => {
-      user = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        role: 'admin'
-      };
-    });
     it('should create a user properly', async done => {
       const userQuery = { insertAndFetch() { return Promise.resolve(user); } }
       const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
@@ -63,10 +64,59 @@ describe('UserManager', () => {
   });
 
   describe('updateUser', () => {
-    it('should update a user properly');
-    it('should throw an error if the user email is set to null')
-    it('should throw an error if the user password is set to null')
-    it('should throw an error if the user role is set to null')
+    it('should update a user properly', async done => {
+      const newUser = {
+        ...user,
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        role: 'regular'
+      }
+      const userQuery = { updateAndFetchById() { return Promise.resolve(newUser); } }
+      const updateSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const payload = { email: newUser.email, password: newUser.password, role: newUser.role };
+      const result = await manager.updateUser(user.id, payload);
+
+      expect(result.email).toEqual(newUser.email);
+      expect(result.role).toEqual(newUser.role);
+      expect(updateSpy).toHaveBeenCalled();
+      done();
+    });
+    it('should throw an error if the user email is set to null', async done => {
+      const userQuery = { updateAndFetchById() { return Promise.resolve(user); } }
+      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      try {
+        const payload = { email: null };
+        await manager.updateUser(user.id, payload);
+        done.fail('Should throw an error');
+      } catch (err) {
+        expect(createSpy).not.toHaveBeenCalled();
+        done();
+      }
+    })
+    it('should throw an error if the user password is set to null', async done => {
+      const userQuery = { updateAndFetchById() { return Promise.resolve(user); } }
+      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      try {
+        const payload = { password: null };
+        await manager.updateUser(user.id, payload);
+        done.fail('Should throw an error');
+      } catch (err) {
+        expect(createSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+    it('should throw an error if the user role is set to null', async done => {
+      const userQuery = { updateAndFetchById() { return Promise.resolve(user); } }
+      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      try {
+        const payload = { role: null };
+        await manager.updateUser(user.id, payload);
+        done.fail('Should throw an error');
+      } catch (err) {
+        expect(createSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
   });
 
   describe('getUsers', () => {

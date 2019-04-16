@@ -26,6 +26,12 @@ class UserManager {
    * @param {Object} payload with the user data
    */
   async updateUser(id, payload) {
+    const notNullAttrs = ['email', 'password', 'role'];
+    notNullAttrs.forEach(attr => {
+      if (attr in payload) {
+        assert.ok(payload[attr]);
+      }
+    });
     return await User.query().updateAndFetchById(id, payload);
   }
 
