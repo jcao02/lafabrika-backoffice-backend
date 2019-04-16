@@ -11,9 +11,32 @@ const server = Hapi.server({
   }
 });
 
-routes.forEach((route) => {
-  server.route(route);
+const validateFn = async (decoded) => {
+  if (!'role' in decoded) {
+    return { isValid: false };
+  } else {
+    return { isValid: true, credentials: { scope: decoded.role } };
+  }
+};
+
+const registerPlugins = async () => {
+  await server.register(require('hapi-auth-jwt2'));
+  server.auth.strategy('jwt', 'jwt', {
+    key: process.env.JWT_PRIV_KEY,
+    validate: validateFn
+  });
+
+  server.auth.default('jwt');
+};
+
+/** Register all plugins */
+const pluginsRegistered = registerPlugins().then(() => {
+   /** Register routes after plugins */
+  routes.forEach((route) => {
+    server.route(route);
+  });
 });
+
 
 const init = async () => {
   await server.start();
@@ -25,9 +48,12 @@ process.on('unhandledRejection', (err) => {
   process.exit(1);
 });
 
+
 /** Only start server if not required by another module */
 if (!module.parent) {
-  init();
+  pluginsRegistered.then(() => {
+    init();
+  })
 }
 
 module.exports = { server };
