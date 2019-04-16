@@ -39,8 +39,8 @@ const userShowHandler = async (request) => {
  */
 const userListHandler = async (request) => {
   const { limit, offset = 0 } = request.query;
-  const users = UserManager.getUsers({ limit, offset });
-  return users.toJSON();
+  const users = await UserManager.getUsers({ limit, offset });
+  return users.map(u => u.toJSON());
 };
 
 /**
