@@ -1,6 +1,7 @@
 'use strict';
 
 const UserManager = require('../classes/user-manager');
+const Boom = require('boom');
 
 /**
  * Handles user creation
@@ -24,8 +25,12 @@ const userEditHandler = async (request) => {
  */
 const userShowHandler = async (request) => {
   const { id } = request.params;
-  const user = await UserManager.getUser(id);
-  return user.toJSON();
+  const user = await UserManager.getUser(+id);
+  if (user !== null) {
+    return user.toJSON();
+  } else {
+    throw Boom.notFound('User not found');
+  }
 };
 
 /**
