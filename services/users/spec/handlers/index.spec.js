@@ -306,5 +306,49 @@ describe('Users Handlers', () => {
         done();
       });
     });
+
+    describe('Errors', () => {
+      it('should return 401 when no authentication', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload: { ...user }
+        }
+        const result = await server.inject(opts);
+        const expected = 401;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
+      it('should return 403 when no self scope and admin', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload: { ...user },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: adminScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 403;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
+      it('should return 403 when no self scope and user', async done => {
+        const opts = {
+          method: 'PATCH',
+          url: `/users/${id}`,
+          payload: { ...user },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: userScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 403;
+        expect(result.statusCode).toBe(expected)
+        done();
+      });
+    });
   });
 });
