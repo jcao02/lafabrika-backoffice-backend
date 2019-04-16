@@ -8,7 +8,7 @@ CREATE FUNCTION email_lowercase() RETURNS trigger
   LANGUAGE plpgsql
   AS $$
   BEGIN
-    NEW.email := LOWER(email);
+    NEW.email := LOWER(NEW.email);
     RETURN NEW;
   END;
   $$;
