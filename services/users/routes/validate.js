@@ -1,7 +1,8 @@
-const { selfScope } = require('./scopes');
+const { selfScope, adminScope, userScope } = require('./scopes');
 
 const validateFn = async (decoded, request) => {
-  if (!'role' in decoded) {
+  // Invalid: No role or invalid role
+  if (!( 'role' in decoded ) || ![adminScope, userScope].includes(decoded.role)) {
     return { isValid: false };
   } else {
     const isSelf = request.params.id === decoded.id;
