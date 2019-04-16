@@ -6,8 +6,7 @@ const UserManager = require('../classes/user-manager');
  * Handles user creation
  */
 const userNewHandler = async (request, h) => {
-  const manager = new UserManager();
-  const user = await manager.createUser(request.payload);
+  const user = await UserManager.createUser(request.payload);
   return h.response(user.toJSON()).code(201);
 };
 
@@ -16,8 +15,7 @@ const userNewHandler = async (request, h) => {
  */
 const userEditHandler = async (request) => {
   const { id } = request.params;
-  const manager = new UserManager();
-  const user = await manager.updateUser(id, request.payload);
+  const user = await UserManager.updateUser(id, request.payload);
   return user.toJSON();
 };
 
@@ -26,8 +24,7 @@ const userEditHandler = async (request) => {
  */
 const userShowHandler = async (request) => {
   const { id } = request.params;
-  const manager = new UserManager();
-  const user = await manager.getUser(id);
+  const user = await UserManager.getUser(id);
   return user.toJSON();
 };
 
@@ -36,8 +33,7 @@ const userShowHandler = async (request) => {
  */
 const userListHandler = async (request) => {
   const { limit, offset = 0 } = request.query;
-  const manager = new UserManager();
-  const users = manager.getUsers({ limit, offset });
+  const users = UserManager.getUsers({ limit, offset });
   return users.toJSON();
 };
 
@@ -46,8 +42,7 @@ const userListHandler = async (request) => {
  */
 const userDeleteHandler = async (request) => {
   const { id } = request.params;
-  const manager = new UserManager();
-  return await manager.deleteUser(id);
+  return await UserManager.deleteUser(id);
 };
 
 
