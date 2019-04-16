@@ -10,7 +10,7 @@ const {
   userDeleteHandler
 } = require('../handlers');
 
-const { adminScope } = require('./scopes');
+const { adminScope, userScope, selfScope } = require('./scopes');
 
 const routes = [
   {
@@ -33,13 +33,38 @@ const routes = [
   },
   {
     method: 'PATCH',
-    path: '/admin/users',
-    handler: userEditHandler
+    path: '/admin/users/{id}',
+    handler: userEditHandler,
+    config: {
+      auth: {
+        strategy: 'jwt',
+        scope: adminScope
+      },
+      validate: {
+        payload: {
+          email: Joi.string().email(),
+          role: Joi.string().valid(['admin', 'user']),
+          password: Joi.string().min(8)
+        }
+      }
+    }
   },
   {
     method: 'PATCH',
-    path: '/users',
-    handler: userEditHandler
+    path: '/users/{id}',
+    handler: userEditHandler,
+    config: {
+      auth: {
+        strategy: 'jwt',
+        scope: selfScope
+      },
+      validate: {
+        payload: {
+          email: Joi.string().email(),
+          password: Joi.string().min(8)
+        }
+      }
+    }
   },
   {
     method: 'GET',

@@ -2,5 +2,6 @@
 
 module.exports = {
   adminScope: 'admin',
-  userScope: 'user'
+  userScope: 'user',
+  selfScope: 'self'
 };

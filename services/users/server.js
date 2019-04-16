@@ -2,6 +2,7 @@
 
 const Hapi = require('hapi');
 const routes = require('./routes');
+const { selfScope } = require('./routes/scopes');
 
 const server = Hapi.server({
   port: 3000,
@@ -11,11 +12,13 @@ const server = Hapi.server({
   }
 });
 
-const validateFn = async (decoded) => {
+const validateFn = async (decoded, request) => {
   if (!'role' in decoded) {
     return { isValid: false };
   } else {
-    return { isValid: true, credentials: { scope: decoded.role } };
+    const isSelf = request.params.id === decoded.id;
+    const scope = !isSelf ? decoded.role : [decoded.role, selfScope];
+    return { isValid: true, credentials: { scope } };
   }
 };
 
