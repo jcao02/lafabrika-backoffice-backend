@@ -160,8 +160,25 @@ describe('UserManager', () => {
   });
 
   describe('getUser', () => {
-    it('should get the user properly');
-    it('should return null if the user does not exist');
+    it('should get the user properly', async done => {
+      const userQuery = { findById() { return Promise.resolve(user); } }
+      const findSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const result = await manager.getUser(user.id);
+
+      expect(result.email).toEqual(user.email);
+      expect(result.role).toEqual(user.role);
+      expect(findSpy).toHaveBeenCalled();
+      done();
+    });
+    it('should return null if the user does not exist', async done => {
+      const userQuery = { findById() { return Promise.resolve(undefined); } }
+      const findSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const result = await manager.getUser(user.id);
+
+      expect(result).toBeNull();
+      expect(findSpy).toHaveBeenCalled();
+      done();
+    });
   });
 
   describe('deleteUser', () => {
