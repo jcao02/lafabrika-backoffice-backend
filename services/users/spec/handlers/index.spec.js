@@ -14,6 +14,27 @@ describe('Users Handlers', () => {
   });
 
   describe('POST /admin/users', () => {
+    describe('Success', () => {
+      it('should return 201 on succes', async done => {
+        const createdUser = { ...user, id: 1 };
+        const opts = {
+          method: 'POST',
+          url: '/admin/users',
+          payload: { ...user },
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: adminScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 201;
+        expect(result.statusCode).toBe(expected)
+
+        const payload = JSON.parse(result.payload);
+        expect(payload).toEqual(createdUser);
+        done();
+      });
+    });
     describe('Errors', () => {
       it('should return 401 if no authentication', async done => {
         const opts = {
