@@ -69,11 +69,41 @@ describe('Users Handlers', () => {
       expect(result.statusCode).toBe(expected)
       done();
     });
-    it('should validate email as required', async done => {
+    it('should validate email', async done => {
       const opts = {
         method: 'POST',
         url: '/admin/users',
         payload: { ...user, email: 'invalid' },
+        auth: {
+          strategy: 'jwt',
+          credentials: { scope: adminScope }
+        }
+      };
+      const result = await server.inject(opts);
+      const expected = 400;
+      expect(result.statusCode).toBe(expected)
+      done();
+    });
+    it('should validate role as required', async done => {
+      const opts = {
+        method: 'POST',
+        url: '/admin/users',
+        payload: { email: user.email, password: user.password },
+        auth: {
+          strategy: 'jwt',
+          credentials: { scope: adminScope }
+        }
+      };
+      const result = await server.inject(opts);
+      const expected = 400;
+      expect(result.statusCode).toBe(expected)
+      done();
+    });
+    it('should validate role', async done => {
+      const opts = {
+        method: 'POST',
+        url: '/admin/users',
+        payload: { ...user, role: 'invalid' },
         auth: {
           strategy: 'jwt',
           credentials: { scope: adminScope }
