@@ -4,7 +4,7 @@
   "description": "La Fábrika users related operations",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,9 @@
   "dependencies": {
     "hapi": "^18.1.0",
     "lafabrika-objection-models": "file:../../models/objection"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0",
+    "jasmine": "^3.4.0"
   }
 }
