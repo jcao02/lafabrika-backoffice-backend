@@ -32,8 +32,11 @@ services:
       - ./environment/common.env
     volumes:
       - ./services/users:/app
+      - ./models/objection:/app/../../models/objection
     ports:
       - "3002:3000"
+    networks:
+      - internal
     depends_on:
       - db
 
