@@ -11,8 +11,13 @@ const {
 const routes = [
   {
     method: 'POST',
-    path: '/users',
+    path: '/admin/users',
     handler: userNewHandler
+  },
+  {
+    method: 'PATCH',
+    path: '/admin/users',
+    handler: userEditHandler
   },
   {
     method: 'PATCH',
@@ -21,7 +26,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/users',
+    path: '/admin/users',
     handler: userListHandler
   },
   {
@@ -31,7 +36,7 @@ const routes = [
   },
   {
     method: 'DELETE',
-    path: '/users/{id}',
+    path: '/admin/users/{id}',
     handler: userDeleteHandler
   }
 ];
