@@ -1,8 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
-const routes = require('./routes');
-const { selfScope } = require('./routes/scopes');
+const { routes, validateFn } = require('./routes');
 
 const server = Hapi.server({
   port: 3000,
@@ -11,16 +10,6 @@ const server = Hapi.server({
     cors: { credentials: true }
   }
 });
-
-const validateFn = async (decoded, request) => {
-  if (!'role' in decoded) {
-    return { isValid: false };
-  } else {
-    const isSelf = request.params.id === decoded.id;
-    const scope = !isSelf ? decoded.role : [decoded.role, selfScope];
-    return { isValid: true, credentials: { scope } };
-  }
-};
 
 const registerPlugins = async () => {
   await server.register(require('hapi-auth-jwt2'));
