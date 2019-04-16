@@ -26,7 +26,7 @@ const routes = [
         payload: {
           email: Joi.string().email().required(),
           role: Joi.string().valid(['admin', 'user']).required(),
-          password: Joi.string().required()
+          password: Joi.string().min(8).required()
         }
       }
     }

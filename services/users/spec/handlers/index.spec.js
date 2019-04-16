@@ -101,5 +101,35 @@ describe('Users Handlers', () => {
       expect(result.statusCode).toBe(expected)
       done();
     });
+    it('should validate password as required', async done => {
+      const opts = {
+        method: 'POST',
+        url: '/admin/users',
+        payload: { email: user.email, role: 'user' },
+        auth: {
+          strategy: 'jwt',
+          credentials: { scope: adminScope }
+        }
+      };
+      const result = await server.inject(opts);
+      const expected = 400;
+      expect(result.statusCode).toBe(expected)
+      done();
+    });
+    it('should validate password min-length 8', async done => {
+      const opts = {
+        method: 'POST',
+        url: '/admin/users',
+        payload: { email: user.email, role: 'user', password: '1234567' },
+        auth: {
+          strategy: 'jwt',
+          credentials: { scope: adminScope }
+        }
+      };
+      const result = await server.inject(opts);
+      const expected = 400;
+      expect(result.statusCode).toBe(expected)
+      done();
+    });
   });
 });
