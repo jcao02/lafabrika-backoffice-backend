@@ -5,7 +5,7 @@ const { User } = require('lafabrika-objection-models');
 /**
  * This class handle users CRUD
  */
-export class UserManager {
+class UserManager {
 
   /**
    * Creates a user from the payload
@@ -49,3 +49,5 @@ export class UserManager {
     return await User.query().deleteById(id);
   }
 }
+
+module.exports = UserManager;
