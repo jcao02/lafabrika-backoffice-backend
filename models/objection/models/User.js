@@ -35,7 +35,7 @@ class User extends Model {
 
   static get relationMappings() {
     return {
-      role: {
+      authRole: {
         relation: Model.HasOneRelation,
         modelClass: Role,
         join: {
