@@ -12,3 +12,4 @@ functions/users/check_user_password_combination 2019-04-04T18:20:51Z Juan Carlos
 
 functions/trigger_function_email_lowercase_before_insert 2019-04-10T19:09:45Z Daniel Arocha <arocha.daniel3@gmail.com> # add function for email lowercase trigger
 tables/users/trigger_email_lowercase 2019-04-10T19:10:57Z Daniel Arocha <arocha.daniel3@gmail.com> # add trigger for email lowercase before insert function
+tables/users/trigger_encrypt_password_update 2019-04-16T22:53:58Z Juan Carlos Arocha <arochajuan2@gmail.com> # add password encryption on table update
