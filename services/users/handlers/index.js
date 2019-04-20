@@ -1,6 +1,6 @@
 'use strict';
 
-const { User } = require('lafabrika-objection-models');
+const { User, Errors } = require('lafabrika-objection-models');
 const UserManager = require('../classes/user-manager');
 const Boom = require('boom');
 
@@ -8,8 +8,16 @@ const Boom = require('boom');
  * Handles user creation
  */
 const userNewHandler = async (request, h) => {
-  const user = await UserManager.createUser(request.payload);
-  return h.response(user.toJSON()).code(201);
+  try {
+    const user = await UserManager.createUser(request.payload);
+    return h.response(user.toJSON()).code(201);
+  } catch (err) {
+    if (err instanceof Errors.UniqueViolationError) {
+      throw Boom.conflict('Email already registered');
+    } else {
+      throw err;
+    }
+  }
 };
 
 /**
