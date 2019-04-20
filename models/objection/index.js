@@ -2,6 +2,13 @@
 
 const Knex = require('knex');
 const knexConfig = require('./knexfile');
+const {
+  UniqueViolationError,
+  NotNullViolationError,
+  CheckViolationError,
+  ConstraintViolationError,
+  ForeignKeyViolationError
+} = require('objection-db-errors');
 
 const { Model } = require('objection');
 
@@ -13,5 +20,12 @@ Model.knex(knex);
 module.exports = {
   User: require('./models/User'),
   Role: require('./models/Role'),
+  Errors: {
+    UniqueViolationError,
+    NotNullViolationError,
+    CheckViolationError,
+    ConstraintViolationError,
+    ForeignKeyViolationError
+  }
 };
 
