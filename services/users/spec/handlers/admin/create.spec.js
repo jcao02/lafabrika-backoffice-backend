@@ -1,5 +1,5 @@
 const faker = require('faker');
-const { User } = require('lafabrika-objection-models');
+const { User, Errors } = require('lafabrika-objection-models');
 
 const { server } = require('../../../server');
 const { adminScope, userScope } = require('../../../routes/scopes');
@@ -157,6 +157,25 @@ describe('User Handlers Admin', () => {
         const result = await server.inject(opts);
         const expected = 400;
         expect(result.statusCode).toBe(expected)
+        done();
+      });
+
+      it('should return 409 when user already exists', async done => {
+        const userSpy = spyOn(UserManager, 'createUser').and.throwError(new Errors.UniqueViolationError({ nativeError: new Error('') }));
+        const payload = { ...user };
+        const opts = {
+          method: 'POST',
+          url: '/admin/users',
+          payload,
+          auth: {
+            strategy: 'jwt',
+            credentials: { scope: adminScope }
+          }
+        };
+        const result = await server.inject(opts);
+        const expected = 409;
+        expect(result.statusCode).toBe(expected)
+        expect(userSpy).toHaveBeenCalledWith(payload);
         done();
       });
     });
