@@ -1,8 +1,8 @@
 'use strict';
 
-const { Model } = require('objection');
+const { BaseModel } = require('./Base');
 
-class Role extends Model {
+class Role extends BaseModel {
   static get tableName() {
     return 'roles';
   }
