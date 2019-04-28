@@ -1,9 +1,9 @@
 const faker = require('faker');
 const UserManager = require('../../classes/user-manager');
-const { User } = require('lafabrika-objection-models');
+const { User, UserPrivateInformation } = require('lafabrika-objection-models');
 
 describe('UserManager', () => {
-  let user, userModel;
+  let user, userModel, userModelWithoutPass;
   beforeEach(() => {
     user = {
       id: faker.random.number(),
@@ -20,6 +20,9 @@ describe('UserManager', () => {
     };
 
     delete userModel.password;
+
+    userModelWithoutPass = { ...userModel };
+    delete userModelWithoutPass.privateInformation;
   });
   describe('createUser', () => {
     it('should create a user properly', async done => {
@@ -74,6 +77,89 @@ describe('UserManager', () => {
         done.fail('Should throw an error');
       } catch (err) {
         expect(createSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+  });
+
+  describe('updatePassword', () => {
+    let findSpy, updateSpy;
+    beforeEach(() => {
+      const userQuery = {
+        findById() {
+          return {
+            first() {
+              return {
+                throwIfNotFound() {
+                  return Promise.resolve(userModelWithoutPass);
+                }
+              }
+            }
+          }
+        }
+      };
+      findSpy = spyOn(User, 'query').and.returnValue(userQuery);
+
+      const userPrivQuery = { update() { return { where() {} }; } }
+      updateSpy = spyOn(UserPrivateInformation, 'query').and.returnValue(userPrivQuery);
+
+    });
+
+    it('should update password properly', async done => {
+      spyOn(User, 'checkUserPassword').and.returnValue(Promise.resolve(true));
+
+      const payload = {
+        id: '1',
+        oldPassword: 'myOldPassword',
+        newPassword: 'myNewPassword'
+      };
+
+      const result = await UserManager.updatePassword(payload.id, payload.oldPassword, payload.newPassword);
+      expect(findSpy).toHaveBeenCalled();
+      expect(updateSpy).toHaveBeenCalled();
+      expect(result).toEqual(undefined);
+      done();
+    });
+    it('should throw an error if old password is not correct', async done => {
+      spyOn(User, 'checkUserPassword').and.returnValue(Promise.resolve(false));
+
+      try {
+        const payload = {
+          id: '1',
+          oldPassword: 'myOldPassword',
+          newPassword: 'myNewPassword'
+        };
+        await UserManager.updatePassword(payload.id, payload.oldPassword, payload.newPassword);
+        done.fail('Should throw error');
+      } catch (err) {
+        expect(findSpy).toHaveBeenCalled();
+        expect(updateSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+    it('should throw an error if user is not found', async done => {
+      const userQuery = {
+        findById() {
+          return {
+            first() {
+              return { throwIfNotFound() { return Promise.reject(User.createNotFoundError()); } }
+            }
+          }
+        }
+      };
+      let findSpy = User.query.and.returnValue(userQuery);
+      try {
+        const payload = {
+          id: '1',
+          oldPassword: 'myOldPassword',
+          newPassword: 'myNewPassword'
+        };
+        await UserManager.updatePassword(payload.id, payload.oldPassword, payload.newPassword);
+        done.fail('Should throw error');
+      } catch (err) {
+        expect(err instanceof Error).toBe(true);
+        expect(findSpy).toHaveBeenCalled();
+        expect(updateSpy).not.toHaveBeenCalled();
         done();
       }
     });

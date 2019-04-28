@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert');
-const { User } = require('lafabrika-objection-models');
+const { User, UserPrivateInformation } = require('lafabrika-objection-models');
 
 /**
  * This class handle users CRUD
@@ -34,6 +34,22 @@ class UserManager {
       }
     });
     return await User.query().updateAndFetchById(id, payload);
+  }
+
+  /**
+   * Updates a user password by id
+   * @param {String} id of the user
+   * @param {String} oldPassword of the user
+   * @param {String} newPassword to be set
+   */
+  static async updatePassword(id, oldPassword, newPassword) {
+    const user = await User.query().findById(id).first().throwIfNotFound();
+    const isPasswordCorrect = await User.checkUserPassword(user.email, oldPassword);
+    if (isPasswordCorrect) {
+      return await UserPrivateInformation.query().update({ password: newPassword }).where('user_id', '=', id);
+    } else {
+      throw new Error('Not allowed');
+    }
   }
 
   /**
