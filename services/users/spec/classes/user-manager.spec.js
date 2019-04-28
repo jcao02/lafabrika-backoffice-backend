@@ -23,8 +23,7 @@ describe('UserManager', () => {
   });
   describe('createUser', () => {
     it('should create a user properly', async done => {
-      const userQuery = { insertGraph() { return Promise.resolve(userModel); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       const payload = { email: user.email, password: user.password, role: user.role };
       const result = await UserManager.createUser(payload);
 
@@ -35,8 +34,7 @@ describe('UserManager', () => {
       done();
     });
     it('should throw an error if the user has an id', async done => {
-      const userQuery = { insertGraph() { return Promise.resolve(userModel); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = user;
         await UserManager.createUser(payload);
@@ -47,8 +45,7 @@ describe('UserManager', () => {
       }
     });
     it('should throw an error if the user is missing password', async done => {
-      const userQuery = { insertGraph() { return Promise.resolve(userModel); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = { email: user.email, role: user.role };
         await UserManager.createUser(payload);
@@ -59,8 +56,7 @@ describe('UserManager', () => {
       }
     });
     it('should throw an error if the user is missing email', async done => {
-      const userQuery = { insertGraph() { return Promise.resolve(userModel); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = { password: user.password, role: user.role };
         await UserManager.createUser(payload);
@@ -71,8 +67,7 @@ describe('UserManager', () => {
       }
     });
     it('should throw an error if the user is missing role', async done => {
-      const userQuery = { insertGraph() { return Promise.resolve(userModel); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = { email: user.email, password: user.password };
         await UserManager.createUser(payload);

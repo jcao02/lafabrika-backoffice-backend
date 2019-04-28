@@ -18,16 +18,7 @@ class UserManager {
     assert.ok(payload.password);
     assert.ok(payload.role);
 
-    /** Don't include password in user's payload. It won't work */
-    const password = payload.password;
-    delete payload.password;
-
-    const graphToInsert = {
-      ...payload,
-      privateInformation: { password }
-    }
-
-    return await User.query().insertGraph(graphToInsert);
+    return await User.createWithPassword(payload);
   }
 
   /**
