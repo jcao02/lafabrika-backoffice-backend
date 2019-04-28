@@ -4,6 +4,6 @@ BEGIN;
 
 SET search_path TO lafabrika, public;
 
-DROP TRIGGER encrypt_password_edit ON users;
+DROP TRIGGER encrypt_password_edit ON user_private_informations;
 
 COMMIT;

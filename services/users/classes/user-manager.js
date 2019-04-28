@@ -13,11 +13,12 @@ class UserManager {
    * @param {Object} payload with user data
    */
   static async createUser(payload) {
+    assert.ok(!payload.id)
     assert.ok(payload.email);
     assert.ok(payload.password);
     assert.ok(payload.role);
 
-    return await User.query().insertAndFetch(payload);
+    return await User.createWithPassword(payload);
   }
 
   /**

@@ -20,6 +20,7 @@ Model.knex(knex);
 module.exports = {
   User: require('./models/User'),
   Role: require('./models/Role'),
+  UserPrivateInformation: require('./models/UserPrivateInformation'),
   Errors: {
     UniqueViolationError,
     NotNullViolationError,

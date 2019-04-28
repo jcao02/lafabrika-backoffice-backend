@@ -5,7 +5,7 @@ BEGIN;
 SET search_path TO lafabrika, public;
 
 CREATE TRIGGER encrypt_password
-BEFORE INSERT ON users
+BEFORE INSERT ON user_private_informations
 FOR EACH ROW
 EXECUTE PROCEDURE encrypt_user_password();
 

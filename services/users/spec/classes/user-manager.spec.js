@@ -3,30 +3,49 @@ const UserManager = require('../../classes/user-manager');
 const { User } = require('lafabrika-objection-models');
 
 describe('UserManager', () => {
-  let user;
+  let user, userModel;
   beforeEach(() => {
     user = {
       id: faker.random.number(),
       email: faker.internet.email(),
+      role: 'admin',
       password: faker.internet.password(),
-      role: 'admin'
     };
+
+    userModel = {
+      ...user,
+      privateInformation: {
+        password: user.password,
+      }
+    };
+
+    delete userModel.password;
   });
   describe('createUser', () => {
     it('should create a user properly', async done => {
-      const userQuery = { insertAndFetch() { return Promise.resolve(user); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       const payload = { email: user.email, password: user.password, role: user.role };
       const result = await UserManager.createUser(payload);
 
       expect(result.email).toEqual(user.email);
       expect(result.role).toEqual(user.role);
+      expect(result.privateInformation).toEqual({ password: user.password });
       expect(createSpy).toHaveBeenCalled();
       done();
     });
+    it('should throw an error if the user has an id', async done => {
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
+      try {
+        const payload = user;
+        await UserManager.createUser(payload);
+        done.fail('SHould throw and error');
+      } catch (err) {
+        expect(createSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
     it('should throw an error if the user is missing password', async done => {
-      const userQuery = { insertAndFetch() { return Promise.resolve(user); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = { email: user.email, role: user.role };
         await UserManager.createUser(payload);
@@ -37,8 +56,7 @@ describe('UserManager', () => {
       }
     });
     it('should throw an error if the user is missing email', async done => {
-      const userQuery = { insertAndFetch() { return Promise.resolve(user); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = { password: user.password, role: user.role };
         await UserManager.createUser(payload);
@@ -49,8 +67,7 @@ describe('UserManager', () => {
       }
     });
     it('should throw an error if the user is missing role', async done => {
-      const userQuery = { insertAndFetch() { return Promise.resolve(user); } }
-      const createSpy = spyOn(User, 'query').and.returnValue(userQuery);
+      const createSpy = spyOn(User, 'createWithPassword').and.returnValue(Promise.resolve(userModel));
       try {
         const payload = { email: user.email, password: user.password };
         await UserManager.createUser(payload);

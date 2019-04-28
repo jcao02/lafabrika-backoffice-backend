@@ -1,3 +1,5 @@
+const Objection = require('objection');
+const faker = require('faker');
 const { User } = require('../../index');
 /**
  * Creates a Result-compatible type (https://node-postgres.com/api/result)
@@ -8,6 +10,43 @@ function createResult(rows) {
 }
 
 describe('User model', () => {
+  describe('createWithPassword', () => {
+    let user, userGraph;
+    beforeEach(() => {
+      user = {
+        id: faker.random.number(),
+        email: faker.internet.email(),
+        role: 'admin',
+        password: faker.internet.password(),
+      };
+      userGraph = {
+        ...user,
+        privateInformation: {
+          password: user.password,
+        }
+      };
+    delete userGraph.password;
+    });
+
+    it('should create a user with its password properly', async done => {
+      const trxSpy = spyOn(Objection, 'transaction').and.returnValue(Promise.resolve(userGraph));
+      const payload = user;
+      await User.createWithPassword(payload);
+      expect(trxSpy).toHaveBeenCalled();
+      done();
+    });
+    it('should throw error is password is not provided', async done => {
+      const trxSpy = spyOn(Objection, 'transaction');
+      try {
+        const payload = { email: user.email, role: user.role };
+        await User.createWithPassword(payload);
+        done.fail('Should throw error');
+      } catch (err) {
+        expect(trxSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+  });
   describe('checkUserPassword', () => {
     const email = 'jon@example.com';
     const password = 'mypassword';
