@@ -1,5 +1,7 @@
 'use strict';
 
+const assert = require('assert');
+const Objection = require('objection');
 const { BaseModel } = require('./Base');
 const Role = require('./Role');
 const UserPrivateInformation = require('./UserPrivateInformation')
@@ -7,6 +9,30 @@ const UserPrivateInformation = require('./UserPrivateInformation')
 class User extends BaseModel {
   static get tableName() {
     return 'users';
+  }
+
+  /**
+   * Creates a user in the DB and its private information relationship
+   * @param {Object} payload including user password
+   */
+  static async createWithPassword(payload) {
+    // Password must be present in this function
+    assert.ok(payload.password);
+    // Create relationship graph
+    const graphToInsert = {
+      ...payload,
+      privateInformation: { password: payload.password }
+    }
+    // Users table does not have a password
+    delete graphToInsert.password;
+
+    // A transaction is required because `insertGraph` is not atomic
+    return await Objection.transaction(User.knex(), async trx =>
+      User
+        .query(trx)
+        .insertGraph(graphToInsert)
+        .returning('*')
+    );
   }
 
   /**
