@@ -1,9 +1,9 @@
 const faker = require('faker');
 const UserManager = require('../../classes/user-manager');
-const { User } = require('lafabrika-objection-models');
+const { User, UserPrivateInformation } = require('lafabrika-objection-models');
 
 describe('UserManager', () => {
-  let user, userModel;
+  let user, userModel, userModelWithoutPass;
   beforeEach(() => {
     user = {
       id: faker.random.number(),
@@ -20,6 +20,9 @@ describe('UserManager', () => {
     };
 
     delete userModel.password;
+
+    userModelWithoutPass = { ...userModel };
+    delete userModelWithoutPass.privateInformation;
   });
   describe('createUser', () => {
     it('should create a user properly', async done => {
@@ -74,6 +77,61 @@ describe('UserManager', () => {
         done.fail('Should throw an error');
       } catch (err) {
         expect(createSpy).not.toHaveBeenCalled();
+        done();
+      }
+    });
+  });
+
+  describe('updatePassword', () => {
+    it('should update password properly', async done => {
+      const userPrivQuery = {
+        update() {
+          return {
+            where() {
+              return {
+                throwIfNotFound() {
+                }
+              }
+            }
+          };
+        }
+      }
+      let updateSpy = spyOn(UserPrivateInformation, 'query').and.returnValue(userPrivQuery);
+      const payload = {
+        id: '1',
+        newPassword: 'myNewPassword'
+      };
+
+      const result = await UserManager.updatePassword(payload.id, payload.newPassword);
+      expect(updateSpy).toHaveBeenCalled();
+      expect(result).toEqual(undefined);
+      done();
+    });
+    it('should throw an error if user is not found', async done => {
+      const userPrivQuery = {
+        update() {
+          return {
+            where() {
+              return {
+                throwIfNotFound() {
+                  return Promise.reject(User.createNotFoundError())
+                }
+              }
+            }
+          };
+        }
+      }
+      spyOn(UserPrivateInformation, 'query').and.returnValue(userPrivQuery);
+      try {
+        const payload = {
+          id: '1',
+          oldPassword: 'myOldPassword',
+          newPassword: 'myNewPassword'
+        };
+        await UserManager.updatePassword(payload.id, payload.newPassword);
+        done.fail('Should throw error');
+      } catch (err) {
+        expect(err instanceof Error).toBe(true);
         done();
       }
     });
