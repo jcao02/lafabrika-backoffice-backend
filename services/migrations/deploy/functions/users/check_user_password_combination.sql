@@ -10,9 +10,10 @@ CREATE FUNCTION check_user_password_combination(uemail TEXT, upassword TEXT) RET
   DECLARE encrypted_pass TEXT;
   BEGIN
 
-    SELECT password INTO encrypted_pass
-    FROM users
-    WHERE email = uemail;
+    SELECT upi.password INTO encrypted_pass
+    FROM users u
+    INNER JOIN user_private_informations upi ON u.id = upi.user_id
+    WHERE u.email = uemail;
 
     RETURN FOUND AND crypt(upassword, encrypted_pass) = encrypted_pass;
   END;
