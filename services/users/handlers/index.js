@@ -34,10 +34,10 @@ const userEditHandler = async (request) => {
  */
 const privateInformationEditHandler = async (request, h) => {
   const { id } = request.params;
-  const { currentPassword, newPassword } = request.payload;
+  const { newPassword } = request.payload;
   try {
     if (newPassword) {
-      await UserManager.updatePassword(id, currentPassword, newPassword);
+      await UserManager.updatePassword(id, newPassword);
     }
 
     return h.continue;

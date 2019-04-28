@@ -83,83 +83,55 @@ describe('UserManager', () => {
   });
 
   describe('updatePassword', () => {
-    let findSpy, updateSpy;
-    beforeEach(() => {
-      const userQuery = {
-        findById() {
+    it('should update password properly', async done => {
+      const userPrivQuery = {
+        update() {
           return {
-            first() {
+            where() {
               return {
                 throwIfNotFound() {
-                  return Promise.resolve(userModelWithoutPass);
                 }
               }
             }
-          }
+          };
         }
-      };
-      findSpy = spyOn(User, 'query').and.returnValue(userQuery);
-
-      const userPrivQuery = { update() { return { where() {} }; } }
-      updateSpy = spyOn(UserPrivateInformation, 'query').and.returnValue(userPrivQuery);
-
-    });
-
-    it('should update password properly', async done => {
-      spyOn(User, 'checkUserPassword').and.returnValue(Promise.resolve(true));
-
+      }
+      let updateSpy = spyOn(UserPrivateInformation, 'query').and.returnValue(userPrivQuery);
       const payload = {
         id: '1',
-        oldPassword: 'myOldPassword',
         newPassword: 'myNewPassword'
       };
 
-      const result = await UserManager.updatePassword(payload.id, payload.oldPassword, payload.newPassword);
-      expect(findSpy).toHaveBeenCalled();
+      const result = await UserManager.updatePassword(payload.id, payload.newPassword);
       expect(updateSpy).toHaveBeenCalled();
       expect(result).toEqual(undefined);
       done();
     });
-    it('should throw an error if old password is not correct', async done => {
-      spyOn(User, 'checkUserPassword').and.returnValue(Promise.resolve(false));
-
-      try {
-        const payload = {
-          id: '1',
-          oldPassword: 'myOldPassword',
-          newPassword: 'myNewPassword'
-        };
-        await UserManager.updatePassword(payload.id, payload.oldPassword, payload.newPassword);
-        done.fail('Should throw error');
-      } catch (err) {
-        expect(findSpy).toHaveBeenCalled();
-        expect(updateSpy).not.toHaveBeenCalled();
-        done();
-      }
-    });
     it('should throw an error if user is not found', async done => {
-      const userQuery = {
-        findById() {
+      const userPrivQuery = {
+        update() {
           return {
-            first() {
-              return { throwIfNotFound() { return Promise.reject(User.createNotFoundError()); } }
+            where() {
+              return {
+                throwIfNotFound() {
+                  return Promise.reject(User.createNotFoundError())
+                }
+              }
             }
-          }
+          };
         }
-      };
-      let findSpy = User.query.and.returnValue(userQuery);
+      }
+      spyOn(UserPrivateInformation, 'query').and.returnValue(userPrivQuery);
       try {
         const payload = {
           id: '1',
           oldPassword: 'myOldPassword',
           newPassword: 'myNewPassword'
         };
-        await UserManager.updatePassword(payload.id, payload.oldPassword, payload.newPassword);
+        await UserManager.updatePassword(payload.id, payload.newPassword);
         done.fail('Should throw error');
       } catch (err) {
         expect(err instanceof Error).toBe(true);
-        expect(findSpy).toHaveBeenCalled();
-        expect(updateSpy).not.toHaveBeenCalled();
         done();
       }
     });

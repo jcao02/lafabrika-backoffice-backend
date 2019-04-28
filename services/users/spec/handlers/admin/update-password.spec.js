@@ -12,7 +12,6 @@ describe('User Handlers Admin', () => {
     let payload;
     beforeEach(() => {
       payload = {
-        currentPassword: faker.internet.password(),
         newPassword: faker.internet.password(10)
       };
     });

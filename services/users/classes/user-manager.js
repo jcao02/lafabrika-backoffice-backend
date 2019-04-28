@@ -39,17 +39,14 @@ class UserManager {
   /**
    * Updates a user password by id
    * @param {String} id of the user
-   * @param {String} currentPassword of the user
    * @param {String} newPassword to be set
    */
-  static async updatePassword(id, currentPassword, newPassword) {
-    const user = await User.query().findById(id).first().throwIfNotFound();
-    const isPasswordCorrect = await User.checkUserPassword(user.email, currentPassword);
-    if (isPasswordCorrect) {
-      return await UserPrivateInformation.query().update({ password: newPassword }).where('user_id', '=', id);
-    } else {
-      throw new Error('Not allowed');
-    }
+  static async updatePassword(id, newPassword) {
+    return await UserPrivateInformation
+      .query()
+      .update({ password: newPassword })
+      .where('user_id', '=', id)
+      .throwIfNotFound();
   }
 
   /**

@@ -17,7 +17,6 @@ const routes = [
       },
       validate: {
         payload: {
-          currentPassword: Joi.string().required(),
           newPassword: Joi.string().min(8)
         }
       }
