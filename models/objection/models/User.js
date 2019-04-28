@@ -1,8 +1,8 @@
 'use strict';
 
-const { Model } = require('objection');
 const { BaseModel } = require('./Base');
 const Role = require('./Role');
+const UserPrivateInformation = require('./UserPrivateInformation')
 
 class User extends BaseModel {
   static get tableName() {
@@ -37,11 +37,19 @@ class User extends BaseModel {
   static get relationMappings() {
     return {
       authRole: {
-        relation: Model.HasOneRelation,
+        relation: BaseModel.HasOneRelation,
         modelClass: Role,
         join: {
           from: 'users.role',
           to: 'roles.name'
+        }
+      },
+      privateInformation: {
+        relation: BaseModel.HasOneRelation,
+        modelClass: UserPrivateInformation,
+        join : {
+          from: 'users.id',
+          to: 'user_private_informations.user_id'
         }
       }
     };
