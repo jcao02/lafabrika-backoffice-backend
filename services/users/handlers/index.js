@@ -30,6 +30,27 @@ const userEditHandler = async (request) => {
 };
 
 /**
+ * Handlers user private information edition
+ */
+const privateInformationEditHandler = async (request, h) => {
+  const { id } = request.params;
+  const { currentPassword, newPassword } = request.payload;
+  try {
+    if (newPassword) {
+      await UserManager.updatePassword(id, currentPassword, newPassword);
+    }
+
+    return h.continue;
+  } catch (err) {
+    if (err instanceof User.NotFoundError) {
+      throw Boom.notFound('User not found');
+    } else {
+      throw err;
+    }
+  }
+};
+
+/**
  * Handles user show
  */
 const userShowHandler = async (request) => {
@@ -74,5 +95,6 @@ module.exports = {
   userEditHandler,
   userShowHandler,
   userListHandler,
-  userDeleteHandler
+  userDeleteHandler,
+  privateInformationEditHandler
 };
