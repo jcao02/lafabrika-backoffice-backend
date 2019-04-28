@@ -13,11 +13,21 @@ class UserManager {
    * @param {Object} payload with user data
    */
   static async createUser(payload) {
+    assert.ok(!payload.id)
     assert.ok(payload.email);
     assert.ok(payload.password);
     assert.ok(payload.role);
 
-    return await User.query().insertAndFetch(payload);
+    /** Don't include password in user's payload. It won't work */
+    const password = payload.password;
+    delete payload.password;
+
+    const graphToInsert = {
+      ...payload,
+      privateInformation: { password }
+    }
+
+    return await User.query().insertGraph(graphToInsert);
   }
 
   /**
