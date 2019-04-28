@@ -2,7 +2,11 @@
 
 BEGIN;
 
-SELECT name FROM lafabrika.roles WHERE FALSE;
+SET search_path TO lafabrika, public;
+
+SELECT user_id, password FROM user_private_informations WHERE FALSE;
+
+SELECT name FROM roles WHERE FALSE;
 
 SELECT
   id,
@@ -10,8 +14,7 @@ SELECT
   first_name,
   last_name,
   created_at,
-  role,
-  password
+  role
 FROM lafabrika.users WHERE FALSE;
 
 ROLLBACK;
