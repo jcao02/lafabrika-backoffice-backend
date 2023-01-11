@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/jcao02/lafabrika-backoffice-backend#readme",
   "dependencies": {
-    "knex": "^0.16.3",
+    "knex": "^2.4.0",
     "objection": "^1.6.7",
     "objection-db-errors": "^1.1.1",
     "pg": "^7.9.0"
